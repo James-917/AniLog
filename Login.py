@@ -60,8 +60,8 @@ frame_form = ctk.CTkFrame(app, width=500, height=500, corner_radius=10, )
 frame_form.pack(expand=True, padx=20, pady=20)
 
 # Form title
-label_title = ctk.CTkLabel(frame_header, text="AniLog", font=("Bahnschrift", 24, "bold", ), fg_color="darkblue", corner_radius= 10)
-label_title.pack(pady= 10)
+label_title = ctk.CTkLabel(frame_header, text="  AniLog  ", font=("Bahnschrift", 24, "bold", ), fg_color="darkblue", corner_radius= 10)
+label_title.pack(pady= 10, ipady = 10)
 
 # Username entry
 entry_username = ctk.CTkEntry(frame_form, placeholder_text="Username", width=240)
@@ -87,13 +87,13 @@ toggle_password_switch.pack(side="left")
 frame_buttons = ctk.CTkFrame(frame_form, fg_color="transparent")
 frame_buttons.pack(pady=20,padx=20)
 
-button_register = ctk.CTkButton(frame_buttons, text="Register", font=('Arial', 12, 'bold'), width=100, command=register)
+button_register = ctk.CTkButton(frame_buttons, text="Register", font=('Arial', 15, 'bold'), width=100, command=register)
 button_register.grid(row=0, column=0, padx=10)
 
 label_or = ctk.CTkLabel(frame_buttons, text="or", font=("Arial", 12))
 label_or.grid(row=0, column=1)
 
-button_login = ctk.CTkButton(frame_buttons, text="Login", font=('Arial', 12, 'bold'), width=100, command=login)
+button_login = ctk.CTkButton(frame_buttons, text="Login", font=('Arial', 15, 'bold'), width=100, command=login)
 button_login.grid(row=0, column=2, padx=10)
 
 # Run the application

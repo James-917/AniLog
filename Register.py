@@ -45,7 +45,12 @@ def save_registration():
             query = "INSERT INTO tbaccount (name, username, password) VALUES (%s, %s, %s)"
             cursor.execute(query, (name, username, password))
             connection.commit()
-            messagebox.showinfo("Success", "Registration successful!")
+            #messagebox.showinfo("Success", "Registration successful!")
+
+            proceed_login = messagebox.askyesno("Registration successful!", "Would you like to proceed Login?")
+            if proceed_login:
+                go_back()
+
             cursor.close()
             connection.close()
         except pymysql.MySQLError as e:
@@ -55,6 +60,14 @@ def save_registration():
 def go_back():
     app.destroy()
     os.system("python Login.py")
+
+def toggle_password():
+    if entry_password.cget("show") == "":
+        entry_password.configure(show="*")
+        entry_confirm_password.configure(show="*")
+    else:
+        entry_password.configure(show="")
+        entry_confirm_password.configure(show="")
 
 # UI Design ======================================================================================
 
@@ -74,8 +87,8 @@ frame_form = ctk.CTkFrame(app, width=500, height=500, corner_radius=10)
 frame_form.pack(expand=True, padx=20, pady=20)
 
 # Title
-label_title = ctk.CTkLabel(frame_header, text="Anilog", font=("Bahnschrift", 24, "bold", ), fg_color="darkblue", corner_radius= 10)
-label_title.pack(pady=20)
+label_title = ctk.CTkLabel(frame_header, text="AniLog", font=("Bahnschrift", 24, "bold", ), fg_color="darkblue", corner_radius= 10)
+label_title.pack(pady=20, ipady = 10)
 
 # Name Entry with Placeholder
 entry_name = ctk.CTkEntry(frame_form, width=300, placeholder_text="Name")
@@ -86,23 +99,27 @@ entry_username = ctk.CTkEntry(frame_form, width=300, placeholder_text="Username"
 entry_username.pack(pady=10)
 
 # Password Entry with Placeholder
-entry_password = ctk.CTkEntry(frame_form, width=300, show="", placeholder_text="Password")
+entry_password = ctk.CTkEntry(frame_form, width=300, show="*", placeholder_text="Password")
 entry_password.pack(pady=10)
 
 # Confirm Password Entry with Placeholder
-entry_confirm_password = ctk.CTkEntry(frame_form, width=300, show="", placeholder_text="Confirm Password")
+entry_confirm_password = ctk.CTkEntry(frame_form, width=300, show="*", placeholder_text="Confirm Password")
 entry_confirm_password.pack(pady=10)
+
+# Toggle Switch
+toggle_password_switch = ctk.CTkSwitch(frame_form, text="Show Password", command=toggle_password)
+toggle_password_switch.pack()
 
 # Register and Login buttons
 frame_buttons = ctk.CTkFrame(frame_form, fg_color="transparent")
 frame_buttons.pack(pady=(20, 20),padx=(20,20))
 
 # Back Button
-button_back = ctk.CTkButton(frame_buttons, text="BACK", width=100, command=go_back)
+button_back = ctk.CTkButton(frame_buttons, text="Login", font=('Arial', 15, 'bold'), width=100, command=go_back)
 button_back.pack(pady=(20, 5), side="left", padx=30)
 
 # Save Button
-button_save = ctk.CTkButton(frame_buttons, text="SAVE", width=100, command=save_registration)
+button_save = ctk.CTkButton(frame_buttons, text="Save", font=('Arial', 15, 'bold'), width=100, command=save_registration)
 button_save.pack(pady=(20, 5), side="right", padx=30)
 
 # Run the app

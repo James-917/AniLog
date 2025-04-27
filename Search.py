@@ -177,25 +177,31 @@ def search_anime():
 def update_scroll_region(event):
     canvas.configure(scrollregion=canvas.bbox("all"))
 
+def maximize_window():
+    app.state('zoomed')
+
 # UI Design ======================================================================================
 
 # UI setup using customtkinter
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 app = ctk.CTk()
-app.geometry("600x800+10+10")
+app.after(100, maximize_window)
 app.title("Anime Search")
 
 # Frame
 frame1 = CTkFrame(app, fg_color="black", corner_radius=0)
 frame1.pack(fill="x")
 
-frame1.columnconfigure(0, weight=0)
-frame1.columnconfigure(1, weight=0)
+frame1.rowconfigure(0, weight=0)
+frame1.rowconfigure(1, weight=0)
+frame1.columnconfigure(0, weight=1)
+frame1.columnconfigure(1, weight=1)
+frame1.columnconfigure(2, weight=1)
 
 # Input label and entry box
 label_title = ctk.CTkLabel(frame1, text="  AniLog  ", font=("Bahnschrift", 24, "bold", ), fg_color="darkblue", corner_radius=10)
-label_title.grid(row=0, column=1, padx=(125,0), pady=10, sticky='')
+label_title.grid(row=1, column=1, padx=(0, 100), pady=(0, 30), ipady = 10, sticky='ns')
 
 # Back button
 back_button = ctk.CTkButton(frame1, text="Back", command=lambda: proceed_to_home(user_id), width=80)

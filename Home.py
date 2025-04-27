@@ -91,8 +91,8 @@ def fetch_anime_entries():
             }
             anime_entries.append(anime_entry)
 
-        if not anime_entries:
-            messagebox.showinfo("No Entries", "No anime entries found for this user.")
+        #if not anime_entries:
+            #messagebox.showinfo("No Entries", "No anime entries found for this user.")
 
         return anime_entries
     except pymysql.MySQLError as e:
@@ -489,13 +489,16 @@ def change_sorting_criterion(sort_by):
 def configure_scroll(event):
     canvas.configure(scrollregion=canvas.bbox("all"))
 
+def maximize_window():
+    app.state('zoomed')
+
 # UI Design ======================================================================================
 
 # Set up the main application window
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 app = ctk.CTk()
-app.geometry("800x700+10+10")
+app.after(100, maximize_window)
 app.title("Home")
 
 # Frame 1 (Top Header)
@@ -510,7 +513,7 @@ frame1.rowconfigure(1, weight=1)
 # Header Content
 label_title = ctk.CTkLabel(frame1, text="  AniLog  ", font=("Bahnschrift", 24, "bold"), fg_color="darkblue",
                            corner_radius=10)
-label_title.grid(row=0, column=0, padx=20, pady=20, rowspan=2, sticky="w")
+label_title.grid(row=0, column=0, padx=20, pady=20, ipady = 10, rowspan=2, sticky="w")
 
 label_welcome = ctk.CTkLabel(frame1, text=f"Welcome! {user_name}", font=("Bahnschrift", 15, "bold"))
 label_welcome.grid(row=0, column=1, rowspan=2)
