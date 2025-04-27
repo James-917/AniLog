@@ -74,7 +74,7 @@ frame_form = ctk.CTkFrame(app, width=500, height=500, corner_radius=10)
 frame_form.pack(expand=True, padx=20, pady=20)
 
 # Title
-label_title = ctk.CTkLabel(frame_header, text="YOUR\nANIME LIST", font=("Bahnschrift", 24, "bold", ), fg_color="darkblue", corner_radius= 10)
+label_title = ctk.CTkLabel(frame_header, text="Anilog", font=("Bahnschrift", 24, "bold", ), fg_color="darkblue", corner_radius= 10)
 label_title.pack(pady=20)
 
 # Name Entry with Placeholder
