@@ -153,17 +153,18 @@ def search_anime():
                             img_label.pack(side="left", padx=5, pady=5)
 
                         # Display the title
-                        title_label = ctk.CTkLabel(result_item, text=title, anchor="w", width=200)
+                        title_label = ctk.CTkLabel(result_item, text=title, anchor="w", width=200, font=("Bahnschrift", 15, 'bold'))
                         title_label.pack(side="left", padx=5, pady=5)
 
                         # Add the "+" button
                         add_button = ctk.CTkButton(
                             result_item,
                             text="+",
+                            font=("Bahnschrift", 20, 'bold'),
                             width=30,
                             command=lambda t=title, un=user_name, uid=user_id: add_title(t, un, uid)  # Pass both user_name and user_id
                         )
-                        add_button.pack(side="right", padx=5)
+                        add_button.pack(side="right", padx=15)
                 else:
                     result_label.configure(text="No titles found.")
         except pymysql.MySQLError as e:
@@ -179,6 +180,52 @@ def update_scroll_region(event):
 
 def maximize_window():
     app.state('zoomed')
+
+def display_all_anime():
+    # Clear previous results
+    for widget in result_canvas_frame.winfo_children():
+        widget.destroy()
+
+    connection = connect_to_dbanime()
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT Title, ImageURL FROM tbanime")
+                results = cursor.fetchall()
+
+                if results:
+                    for row in results:
+                        title, image_url = row
+
+                        result_item = ctk.CTkFrame(result_canvas_frame, width=600)
+                        result_item.pack(fill="x", pady=5, expand=True)
+
+                        img = fetch_image(image_url)
+                        if img:
+                            img_label = ctk.CTkLabel(result_item, image=img, text="")
+                            img_label.image = img
+                            img_label.pack(side="left", padx=5, pady=5)
+
+                        title_label = ctk.CTkLabel(result_item, text=title, anchor="w", width=200, font=("Bahnschrift", 15, 'bold'))
+                        title_label.pack(side="left", padx=5, pady=5)
+
+                        add_button = ctk.CTkButton(
+                            result_item,
+                            text="+",
+                            font=("Bahnschrift", 20, 'bold'),
+                            width=30,
+                            command=lambda t=title, un=user_name, uid=user_id: add_title(t, un, uid)
+                        )
+                        add_button.pack(side="right", padx=15)
+                else:
+                    result_label.configure(text="No anime found.")
+        except pymysql.MySQLError as e:
+            result_label.configure(text=f"Error: {e}")
+        finally:
+            connection.close()
+    else:
+        result_label.configure(text="Failed to connect to the database.")
+
 
 # UI Design ======================================================================================
 
@@ -204,7 +251,7 @@ label_title = ctk.CTkLabel(frame1, text="  AniLog  ", font=("Bahnschrift", 24, "
 label_title.grid(row=1, column=1, padx=(0, 100), pady=(0, 30), ipady = 10, sticky='ns')
 
 # Back button
-back_button = ctk.CTkButton(frame1, text="Back", command=lambda: proceed_to_home(user_id), width=80)
+back_button = ctk.CTkButton(frame1, text="Back",  width=80, font=("Bahnschrift", 15, 'bold'), command=lambda: proceed_to_home(user_id))
 back_button.grid(row=0, column=0, padx=10, pady=10, sticky='nw')
 
 # Search Entry
@@ -212,7 +259,7 @@ search_entry = ctk.CTkEntry(app, width=400)
 search_entry.pack(pady=10)
 
 # Search button
-search_button = ctk.CTkButton(app, text="Search", command=search_anime)
+search_button = ctk.CTkButton(app, text="Search", font=("Bahnschrift", 15, 'bold'), command=search_anime)
 search_button.pack(pady=10)
 
 # Label for additional messages
@@ -240,5 +287,6 @@ canvas.bind("<Configure>", lambda e: canvas.itemconfig(canvas_window, width=e.wi
 result_canvas_frame.grid_columnconfigure(0, weight=1)
 result_canvas_frame.grid_rowconfigure(0, weight=1)
 
+display_all_anime()
 
 app.mainloop()

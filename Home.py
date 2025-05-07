@@ -353,20 +353,20 @@ def create_anime_frame(parent, anime):
     anime_frame.pack(pady=5, padx=5, fill="x", expand=True)
 
     # Title
-    label_title = ctk.CTkLabel(anime_frame, text=f"{anime['Title']}", font=("Arial", 14, "bold"))
+    label_title = ctk.CTkLabel(anime_frame, text=f"{anime['Title']}", font=("Bahnschrift", 20, "bold"))
     label_title.grid(row=0, column=1, padx=10, pady=5, sticky="w")
 
     # Score
-    label_score = ctk.CTkLabel(anime_frame, text=f"Score: {anime['score']}")
+    label_score = ctk.CTkLabel(anime_frame, text=f"Score: {anime['score']}", font=("Bahnschrift", 15))
     label_score.grid(row=1, column=1, padx=10, pady=5, sticky="w")
 
     # Status
-    label_status = ctk.CTkLabel(anime_frame, text=f"Status: {anime['status']}")
+    label_status = ctk.CTkLabel(anime_frame, text=f"Status: {anime['status']}", font=("Bahnschrift", 15))
     label_status.grid(row=2, column=1, padx=10, pady=5, sticky="w")
 
     # Progress (use get to avoid missing key error)
     episode = anime.get('episode', 'N/A')  # Default to 'N/A' if 'episode' is missing
-    label_progress = ctk.CTkLabel(anime_frame, text=f"Progress: {anime['progress']}/{episode}")
+    label_progress = ctk.CTkLabel(anime_frame, text=f"Progress: {anime['progress']}/{episode}", font=("Bahnschrift", 15))
     label_progress.grid(row=0, column=2, padx=10, pady=5, sticky="e")
 
     # Image
@@ -386,10 +386,10 @@ def create_anime_frame(parent, anime):
         print(f"Error loading image for {anime['Title']}: {e}")
 
     # Buttons for Progress and Edit
-    button_add = ctk.CTkButton(anime_frame, text="+1", width=50, command=lambda: increment_progress(anime['id_entry']))
+    button_add = ctk.CTkButton(anime_frame, text="+1", width=50, font=("Bahnschrift", 15, "bold"), command=lambda: increment_progress(anime['id_entry']))
     button_add.grid(row=1, column=2, padx=10, pady=10, sticky="e")
 
-    button_edit = ctk.CTkButton(anime_frame, text="Edit", width=50, command=lambda animex=anime: edit_anime_entry(animex))
+    button_edit = ctk.CTkButton(anime_frame, text="Edit", width=50, font=("Bahnschrift", 15, "bold"), command=lambda animex=anime: edit_anime_entry(animex))
     button_edit.grid(row=2, column=2, padx=10, pady=10, sticky="e")
 
     # Grid column configuration
@@ -402,31 +402,15 @@ def create_anime_frame(parent, anime):
 def filter_anime_entries(status_filter):
     global current_filter, filtered_entries
 
-    current_filter = status_filter  # Update the current filter
+    current_filter = status_filter  # Update current filter
 
+    all_entries = fetch_anime_entries()
     if status_filter == "All":
-        filtered_entries = anime_entries  # Show all entries
+        filtered_entries = all_entries
     else:
-        filtered_entries = [
-            anime for anime in anime_entries if anime["status"].lower() == status_filter.lower()
-        ]
+        filtered_entries = [anime for anime in all_entries if anime["status"].lower() == status_filter.lower()]
 
-    # Display the filtered list
-    sort_anime_entries(current_sort_by)  # Sort the filtered entries
-    display_anime_entries(filtered_entries)  # Display the filtered list
-
-def filter_anime_by_status(status):
-    """Filter anime entries based on the selected status."""
-    if status == "ALL":
-        filtered_entries = fetch_anime_entries()  # Fetch all entries
-        # Sort alphabetically by default
-        filtered_entries.sort(key=lambda anime: anime["Title"].lower())
-    else:
-        all_entries = fetch_anime_entries()
-        # Filter by status
-        filtered_entries = [anime for anime in all_entries if anime['status'].lower() == status.lower()]
-
-    # Display the filtered/sorted list
+    sort_anime_entries(current_sort_by)
     display_anime_entries(filtered_entries)
 
 def display_anime_entries(entries_to_display=None):
@@ -515,13 +499,13 @@ label_title = ctk.CTkLabel(frame1, text="  AniLog  ", font=("Bahnschrift", 24, "
                            corner_radius=10)
 label_title.grid(row=0, column=0, padx=20, pady=20, ipady = 10, rowspan=2, sticky="w")
 
-label_welcome = ctk.CTkLabel(frame1, text=f"Welcome! {user_name}", font=("Bahnschrift", 15, "bold"))
+label_welcome = ctk.CTkLabel(frame1, text=f"Welcome! {user_name}", font=("Bahnschrift", 18, "bold"))
 label_welcome.grid(row=0, column=1, rowspan=2)
 
-button_logout = ctk.CTkButton(frame1, text="LOGOUT", font=('Arial', 12, 'bold'), width=100, command=logout)
+button_logout = ctk.CTkButton(frame1, text="LOGOUT", font=('Bahnschrift', 15, 'bold'), width=100, command=logout)
 button_logout.grid(row=0, column=2, padx=20, pady=20, sticky="e")
 
-button_addEntry = ctk.CTkButton(frame1, text="ADD ENTRY", font=('Arial', 12, 'bold'), width=100, command=go_search)
+button_addEntry = ctk.CTkButton(frame1, text="ADD ENTRY", font=('Bahnschrift', 15, 'bold'), width=100, command=go_search)
 button_addEntry.grid(row=1, column=2, padx=20, pady=20, sticky="e")
 
 # Left Frame
@@ -529,27 +513,27 @@ left_frame = ctk.CTkFrame(app, corner_radius=10)
 left_frame.pack(padx=30, pady=10, side="left")
 
 # All button
-textbox_all = ctk.CTkButton(left_frame, text="ALL", font=('Arial', 12, 'bold'), command=lambda: filter_anime_entries("All"))
+textbox_all = ctk.CTkButton(left_frame, text="ALL", font=('Bahnschrift', 15, 'bold'), command=lambda: filter_anime_entries("All"))
 textbox_all.grid(padx=10, pady=15, column=0, row=0)
 
 # Watching button
-textbox_watching = ctk.CTkButton(left_frame, text="WATCHING", font=('Arial', 12, 'bold'), command=lambda: filter_anime_entries("Watching"))
+textbox_watching = ctk.CTkButton(left_frame, text="WATCHING", font=('Bahnschrift', 15, 'bold'), command=lambda: filter_anime_entries("Watching"))
 textbox_watching.grid(padx=10, pady=15, column=0, row=1)
 
 # Completed button
-textbox_completed = ctk.CTkButton(left_frame, text="COMPLETED", font=('Arial', 12, 'bold'), command=lambda: filter_anime_entries("Completed"))
+textbox_completed = ctk.CTkButton(left_frame, text="COMPLETED", font=('Bahnschrift', 15, 'bold'), command=lambda: filter_anime_entries("Completed"))
 textbox_completed.grid(padx=10, pady=15, column=0, row=2)
 
 # On Hold button
-textbox_onhold = ctk.CTkButton(left_frame, text="ON HOLD", font=('Arial', 12, 'bold'), command=lambda: filter_anime_entries("On Hold"))
+textbox_onhold = ctk.CTkButton(left_frame, text="ON HOLD", font=('Bahnschrift', 15, 'bold'), command=lambda: filter_anime_entries("On Hold"))
 textbox_onhold.grid(padx=10, pady=15, column=0, row=3)
 
 # Dropped button
-textbox_dropped = ctk.CTkButton(left_frame, text="DROPPED", font=('Arial', 12, 'bold'), command=lambda: filter_anime_entries("Dropped"))
+textbox_dropped = ctk.CTkButton(left_frame, text="DROPPED", font=('Bahnschrift', 15, 'bold'), command=lambda: filter_anime_entries("Dropped"))
 textbox_dropped.grid(padx=10, pady=15, column=0, row=4)
 
 # Plan to watch button
-textbox_ptw = ctk.CTkButton(left_frame, text="PLAN TO WATCH", font=('Arial', 12, 'bold'), command=lambda: filter_anime_entries("Plan to Watch"))
+textbox_ptw = ctk.CTkButton(left_frame, text="PLAN TO WATCH", font=('Bahnschrift', 15, 'bold'), command=lambda: filter_anime_entries("Plan to Watch"))
 textbox_ptw.grid(padx=10, pady=15, column=0, row=5)
 
 # Outer Frame
@@ -565,7 +549,7 @@ textbox_search = ctk.CTkTextbox(frame2, height=1, width=300, font=('Arial', 12,)
 textbox_search.grid(row=0, column=0, padx=10)
 
 # Search Button
-textbox_search_button = ctk.CTkButton(frame2, text="SEARCH", font=('Arial', 12, 'bold'), command=search_anime_entries)
+textbox_search_button = ctk.CTkButton(frame2, text="SEARCH", font=('Bahnschrift', 15, 'bold'), command=search_anime_entries)
 textbox_search_button.grid(row=0, column=1, padx=10)
 
 # Frame 3 (Sort By)
@@ -630,7 +614,7 @@ main_frame.grid_columnconfigure(0, weight=1)
 main_frame.grid_rowconfigure(0, weight=1)
 
 # After the UI setup, set the default view to "ALL"
-filter_anime_by_status("ALL")
+filter_anime_entries("All")
 
 # Run the application
 app.mainloop()
